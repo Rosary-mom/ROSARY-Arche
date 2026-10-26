@@ -1,0 +1,78 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>ROSARY-Arche – 3D-Risszeichnung</title>
+<style>
+body{margin:0;overflow:hidden;background:#05030a;font-family:Georgia,serif;color:#f3e6c8}
+#ui{position:fixed;top:12px;left:12px;background:rgba(60,8,20,.8);border:1px solid #c9a24a;border-radius:10px;padding:10px 14px;max-width:300px;z-index:5}
+#ui h1{margin:0 0 6px;font-size:20px;color:#e8c46a}#ui label{font-size:14px}
+#panel{position:fixed;right:12px;bottom:12px;width:min(340px,90vw);background:rgba(60,8,20,.9);border:1px solid #c9a24a;border-radius:10px;padding:12px 16px;display:none;z-index:5}
+#panel h2{margin:0 0 6px;color:#e8c46a}button{background:#7a1a2c;color:#f3e6c8;border:1px solid #c9a24a;border-radius:6px;padding:6px 10px;font-size:15px}
+.lbl{color:#f3e6c8;background:rgba(122,26,44,.85);border:1px solid #c9a24a;border-radius:6px;padding:2px 7px;font-size:13px;pointer-events:none;opacity:.55;transition:.2s}
+.lbl.on{opacity:1;background:#c9a24a;color:#3c0814}
+#tip{position:fixed;pointer-events:none;background:rgba(232,215,180,.95);color:#3c0814;padding:6px 10px;border-radius:6px;font-size:14px;display:none;max-width:240px;z-index:6}
+input[type=range]{width:100%}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.167.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.167.1/examples/jsm/"}}</script>
+</head><body>
+<div id="ui"><h1>ROSARY-Arche</h1><div style="font-size:13px">Ziehen = drehen · Mausrad/Pinch = zoomen · Tippen auf ein Deck = öffnen</div>
+<label>Schnitt (Risszeichnung)<input id="cut" type="range" min="-12" max="12" step="0.1" value="12"></label>
+<button id="reset">Alle Decks schließen</button></div>
+<div id="panel"><h2 id="pt"></h2><div id="pd"></div><p><button id="pc">Schließen</button></p></div>
+<div id="tip"></div>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import {CSS2DRenderer,CSS2DObject} from 'three/addons/renderers/CSS2DRenderer.js';
+const R=new THREE.WebGLRenderer({antialias:true});R.setPixelRatio(Math.min(devicePixelRatio,2));R.setSize(innerWidth,innerHeight);R.localClippingEnabled=true;document.body.appendChild(R.domElement);
+const L=new CSS2DRenderer();L.setSize(innerWidth,innerHeight);Object.assign(L.domElement.style,{position:'fixed',top:0,pointerEvents:'none'});document.body.appendChild(L.domElement);
+const S=new THREE.Scene(),C=new THREE.PerspectiveCamera(50,innerWidth/innerHeight,.1,2000);C.position.set(0,14,26);
+const O=new OrbitControls(C,R.domElement);O.enableDamping=true;O.minDistance=8;O.maxDistance=70;
+S.add(new THREE.HemisphereLight(0xfff2dd,0x220a12,1.2));const D=new THREE.DirectionalLight(0xffffff,2);D.position.set(10,20,10);S.add(D);
+// Sterne
+const sg=new THREE.BufferGeometry(),sp=[];for(let i=0;i<3000;i++){const v=new THREE.Vector3().randomDirection().multiplyScalar(400+Math.random()*400);sp.push(v.x,v.y,v.z)}sg.setAttribute('position',new THREE.Float32BufferAttribute(sp,3));S.add(new THREE.Points(sg,new THREE.PointsMaterial({color:0xffffff,size:1.2})));
+// Erde mit Glühen
+const earth=new THREE.Mesh(new THREE.SphereGeometry(60,48,48),new THREE.MeshStandardMaterial({color:0x2a5fa8,emissive:0x0a2040}));earth.position.set(-90,-80,-200);S.add(earth);
+const glow=new THREE.Mesh(new THREE.SphereGeometry(66,48,48),new THREE.MeshBasicMaterial({color:0x6fb6ff,transparent:true,opacity:.18,side:THREE.BackSide}));glow.position.copy(earth.position);S.add(glow);
+const clip=new THREE.Plane(new THREE.Vector3(0,0,-1),12),cp=[clip];
+const M=(c,o={})=>new THREE.MeshStandardMaterial({color:c,metalness:.5,roughness:.4,clippingPlanes:cp,side:THREE.DoubleSide,...o});
+const ship=new THREE.Group();S.add(ship);
+// Rumpf
+const hullPts=[];for(let i=0;i<=20;i++){const t=i/20;hullPts.push(new THREE.Vector2(10*Math.sin(t*Math.PI*.5)+.01,-1.6+1.6*t*t))}
+const lower=new THREE.Mesh(new THREE.LatheGeometry(hullPts.map(p=>new THREE.Vector2(p.x,p.y)),64),M(0xdfe3e8));ship.add(lower);
+const upper=new THREE.Mesh(new THREE.CylinderGeometry(6,10,1.2,64,1,true),M(0xeef0f3));upper.position.y=.6;ship.add(upper);
+const ring=new THREE.Mesh(new THREE.TorusGeometry(10,.25,12,96),M(0xc9a24a));ring.rotation.x=Math.PI/2;ship.add(ring);
+const dome=new THREE.Mesh(new THREE.SphereGeometry(4,48,24,0,Math.PI*2,0,Math.PI/2),new THREE.MeshPhysicalMaterial({color:0xcfe8ff,transparent:true,opacity:.25,roughness:0,transmission:.6,clippingPlanes:cp,side:THREE.DoubleSide}));dome.position.y=1.2;ship.add(dome);
+const decks=[];
+function deck(name,desc,pos,build){const g=new THREE.Group();g.name=name;g.userData={desc,home:pos.clone(),dir:new THREE.Vector3(pos.x,0,pos.z).normalize()};g.position.copy(pos);build(g);ship.add(g);
+const d=document.createElement('div');d.className='lbl';d.textContent=name;const l=new CSS2DObject(d);l.position.set(0,2.2,0);g.add(l);g.userData.lbl=d;decks.push(g);return g}
+const box=(g,w,h,d,c,y=0,o)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),M(c,o));m.position.y=y;g.add(m);return m};
+deck('Rosarium mit Teich','Das Herz der Arche: ein rundes Hochbeet voller Rosen um einen kreisrunden Teich, unter der gläsernen Kuppel.',new THREE.Vector3(0,1.2,0.0001),g=>{
+ const bed=new THREE.Mesh(new THREE.CylinderGeometry(3.2,3.4,.6,48),M(0x8a5a3a));bed.position.y=.3;g.add(bed);
+ const pond=new THREE.Mesh(new THREE.CylinderGeometry(1.4,1.4,.65,48),M(0x3a8fc0,{emissive:0x0d3050}));pond.position.y=.33;g.add(pond);
+ for(let i=0;i<28;i++){const a=i/28*Math.PI*2,r=2.2+Math.random()*.8;const rose=new THREE.Mesh(new THREE.SphereGeometry(.18,10,8),M(i%3?0x9b1b30:0xe8c46a));rose.position.set(Math.cos(a)*r,.75,Math.sin(a)*r);g.add(rose)}});
+deck('Brücke','Kommandobrücke am Bug mit Rundumsicht und Navigationspulten.',new THREE.Vector3(0,.9,7.3),g=>{box(g,3,1,1.6,0xd8cdb0);box(g,2.6,.3,1.2,0x7a1a2c,.65,{emissive:0x300810})});
+deck('Kapelle','Stiller Raum des Gebets mit goldenem Kreuz und Rosenfenster.',new THREE.Vector3(6.3,.9,3.6),g=>{box(g,2,1.2,1.6,0xe8dcc0);const a=box(g,.12,1,.12,0xe8c46a,1.1,{emissive:0x664400});const b=box(g,.6,.12,.12,0xe8c46a,1.3,{emissive:0x664400})});
+deck('Bibliothek','Archiv des Wissens: Schriften, Baupläne und die Chronik der Reise.',new THREE.Vector3(-6.3,.9,3.6),g=>{box(g,2.2,1.2,1.6,0x7a1a2c);for(let i=0;i<4;i++){const s=box(g,2,.08,1.4,0xc9a24a,-.4+i*.3)}});
+deck('Quartiere','Wohnkabinen der Besatzung und Pilger, ringförmig angeordnet.',new THREE.Vector3(6.3,.9,-3.6),g=>{for(let i=0;i<3;i++){const m=box(g,.6,.9,1.6,0xe6d8b8);m.position.x=-.7+i*.7}});
+deck('Hydroponik','Gewächsdeck für Gemüse, Kräuter und frische Luft.',new THREE.Vector3(-6.3,.9,-3.6),g=>{box(g,2.2,.4,1.6,0x5a3a22,-.3);for(let i=0;i<6;i++){const p=new THREE.Mesh(new THREE.ConeGeometry(.2,.6,8),M(0x3f9a4a));p.position.set(-.8+(i%3)*.8,.2,i<3?-.4:.4);g.add(p)}});
+const reactor=new THREE.Mesh(new THREE.SphereGeometry(.8,24,16),new THREE.MeshStandardMaterial({color:0xffc060,emissive:0xff8800,emissiveIntensity:2,clippingPlanes:cp}));
+deck('Maschinenraum','Antrieb der Arche mit leuchtendem Fusionsreaktor.',new THREE.Vector3(0,-.4,-7),g=>{box(g,3,1.2,2,0x9aa0a8);reactor.position.y=.2;g.add(reactor);const pl=new THREE.PointLight(0xff9a30,20,8);g.add(pl)});
+deck('Hangar','Startdeck mit kleinem Shuttle für Ausflüge zur Erde.',new THREE.Vector3(0,-.9,3.5),g=>{box(g,3,.8,2,0x6a6f78);const sh=new THREE.Mesh(new THREE.ConeGeometry(.4,1.4,12),M(0xf0f0f0));sh.rotation.x=Math.PI/2;sh.position.y=.1;g.add(sh);box(g,1.2,.06,.5,0x7a1a2c,0)});
+// Interaktion
+const ray=new THREE.Raycaster(),ptr=new THREE.Vector2(),tip=document.getElementById('tip');let hov=null;const open=new Set();
+const deckOf=o=>{while(o&&!decks.includes(o))o=o.parent;return o};
+function pick(e){ptr.set(e.clientX/innerWidth*2-1,-e.clientY/innerHeight*2+1);ray.setFromCamera(ptr,C);const h=ray.intersectObjects(decks,true);return h.length?deckOf(h[0].object):null}
+function setHi(g,on){g.traverse(o=>{if(o.isMesh&&o!==reactor){o.material.emissive??=new THREE.Color();if(on){o.userData.e??=o.material.emissive.getHex();o.material.emissive.setHex(0x553311)}else if(o.userData.e!==undefined)o.material.emissive.setHex(o.userData.e)}});g.userData.lbl.classList.toggle('on',on)}
+R.domElement.addEventListener('pointermove',e=>{const g=pick(e);if(g!==hov){hov&&setHi(hov,false);hov=g;g&&setHi(g,true)}
+ if(g){tip.style.display='block';tip.style.left=e.clientX+14+'px';tip.style.top=e.clientY+14+'px';tip.innerHTML='<b>'+g.name+'</b><br>'+g.userData.desc}else tip.style.display='none'});
+let down;R.domElement.addEventListener('pointerdown',e=>down=[e.clientX,e.clientY]);
+R.domElement.addEventListener('pointerup',e=>{if(!down||Math.hypot(e.clientX-down[0],e.clientY-down[1])>6)return;const g=pick(e);if(!g)return;
+ open.has(g)?open.delete(g):open.add(g);document.getElementById('pt').textContent=g.name;document.getElementById('pd').textContent=g.userData.desc;document.getElementById('panel').style.display='block'});
+document.getElementById('pc').onclick=()=>document.getElementById('panel').style.display='none';
+document.getElementById('reset').onclick=()=>open.clear();
+document.getElementById('cut').oninput=e=>clip.constant=+e.target.value;
+addEventListener('resize',()=>{C.aspect=innerWidth/innerHeight;C.updateProjectionMatrix();R.setSize(innerWidth,innerHeight);L.setSize(innerWidth,innerHeight)});
+const clk=new THREE.Clock();
+R.setAnimationLoop(()=>{const t=clk.getElapsedTime();ship.rotation.y+=open.size?0:.001;reactor.material.emissiveIntensity=1.5+Math.sin(t*3)*.7;
+ for(const g of decks){const tgt=g.userData.home.clone();if(open.has(g)){const d=g.userData.dir.lengthSq()?g.userData.dir:new THREE.Vector3();tgt.addScaledVector(d,4);tgt.y+=2.5}g.position.lerp(tgt,.08)}
+ O.update();R.render(S,C);L.render(S,C)});
+</script></body></html>
