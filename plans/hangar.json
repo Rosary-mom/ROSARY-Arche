@@ -1,0 +1,50 @@
+{
+ "id": "hangar",
+ "titel": "Hangar",
+ "untertitel": "Startdeck",
+ "massstab": "1:100 (schematisch)",
+ "lizenz": "© ROSARY ANBAU und ANLAGEN – Lizenz auf Anfrage",
+ "lizenzstatus": "nicht lizenziert – Platzhalter",
+ "artefakte": [
+  {
+   "form": "rechteck",
+   "x": 40,
+   "y": 50,
+   "b": 320,
+   "h": 200,
+   "name": "Hangarhalle"
+  },
+  {
+   "form": "rechteck",
+   "x": 150,
+   "y": 110,
+   "b": 100,
+   "h": 80,
+   "name": "Shuttle „Rosa“"
+  },
+  {
+   "form": "rechteck",
+   "x": 40,
+   "y": 240,
+   "b": 320,
+   "h": 15,
+   "name": "Starttor"
+  },
+  {
+   "form": "rechteck",
+   "x": 50,
+   "y": 60,
+   "b": 60,
+   "h": 40,
+   "name": "Werkstatt"
+  },
+  {
+   "form": "rechteck",
+   "x": 300,
+   "y": 60,
+   "b": 50,
+   "h": 40,
+   "name": "Treibstoff"
+  }
+ ]
+}

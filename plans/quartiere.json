@@ -1,0 +1,50 @@
+{
+ "id": "quartiere",
+ "titel": "Quartiere",
+ "untertitel": "Wohnkabinen der Besatzung",
+ "massstab": "1:100 (schematisch)",
+ "lizenz": "© ROSARY ANBAU und ANLAGEN – Lizenz auf Anfrage",
+ "lizenzstatus": "nicht lizenziert – Platzhalter",
+ "artefakte": [
+  {
+   "form": "rechteck",
+   "x": 40,
+   "y": 60,
+   "b": 100,
+   "h": 90,
+   "name": "Kabine A"
+  },
+  {
+   "form": "rechteck",
+   "x": 150,
+   "y": 60,
+   "b": 100,
+   "h": 90,
+   "name": "Kabine B"
+  },
+  {
+   "form": "rechteck",
+   "x": 260,
+   "y": 60,
+   "b": 100,
+   "h": 90,
+   "name": "Kabine C"
+  },
+  {
+   "form": "rechteck",
+   "x": 40,
+   "y": 170,
+   "b": 320,
+   "h": 50,
+   "name": "Gemeinschaftsflur"
+  },
+  {
+   "form": "rechteck",
+   "x": 60,
+   "y": 80,
+   "b": 50,
+   "h": 25,
+   "name": "Koje"
+  }
+ ]
+}

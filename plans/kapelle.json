@@ -1,0 +1,49 @@
+{
+ "id": "kapelle",
+ "titel": "Kapelle",
+ "untertitel": "Kapelle mit Naturstein-Altar",
+ "massstab": "1:100 (schematisch)",
+ "lizenz": "© ROSARY ANBAU und ANLAGEN – Lizenz auf Anfrage",
+ "lizenzstatus": "nicht lizenziert – Platzhalter",
+ "artefakte": [
+  {
+   "form": "rechteck",
+   "x": 80,
+   "y": 40,
+   "b": 240,
+   "h": 220,
+   "name": "Kirchenschiff"
+  },
+  {
+   "form": "rechteck",
+   "x": 160,
+   "y": 60,
+   "b": 80,
+   "h": 40,
+   "name": "Altar aus Naturstein"
+  },
+  {
+   "form": "kreis",
+   "x": 200,
+   "y": 45,
+   "r": 18,
+   "name": "Rosenfenster"
+  },
+  {
+   "form": "rechteck",
+   "x": 110,
+   "y": 140,
+   "b": 70,
+   "h": 90,
+   "name": "Bankreihen links"
+  },
+  {
+   "form": "rechteck",
+   "x": 220,
+   "y": 140,
+   "b": 70,
+   "h": 90,
+   "name": "Bankreihen rechts"
+  }
+ ]
+}

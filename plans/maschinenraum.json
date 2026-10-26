@@ -1,0 +1,48 @@
+{
+ "id": "maschinenraum",
+ "titel": "Maschinenraum",
+ "untertitel": "Antrieb und Energie",
+ "massstab": "1:100 (schematisch)",
+ "lizenz": "© ROSARY ANBAU und ANLAGEN – Lizenz auf Anfrage",
+ "lizenzstatus": "nicht lizenziert – Platzhalter",
+ "artefakte": [
+  {
+   "form": "kreis",
+   "x": 200,
+   "y": 150,
+   "r": 60,
+   "name": "Fusionsreaktor"
+  },
+  {
+   "form": "kreis",
+   "x": 200,
+   "y": 150,
+   "r": 90,
+   "name": "Magnetring"
+  },
+  {
+   "form": "rechteck",
+   "x": 40,
+   "y": 60,
+   "b": 60,
+   "h": 180,
+   "name": "Energieverteiler"
+  },
+  {
+   "form": "rechteck",
+   "x": 300,
+   "y": 60,
+   "b": 60,
+   "h": 180,
+   "name": "Kühlkreislauf"
+  },
+  {
+   "form": "rechteck",
+   "x": 170,
+   "y": 250,
+   "b": 60,
+   "h": 25,
+   "name": "Steuerpult"
+  }
+ ]
+}

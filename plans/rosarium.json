@@ -1,0 +1,46 @@
+{
+ "id": "rosarium",
+ "titel": "Rosarium mit Teich",
+ "untertitel": "Glaskuppel über rundem Rosengarten",
+ "massstab": "1:100 (schematisch)",
+ "lizenz": "© ROSARY ANBAU und ANLAGEN – Lizenz auf Anfrage",
+ "lizenzstatus": "nicht lizenziert – Platzhalter",
+ "artefakte": [
+  {
+   "form": "kreis",
+   "x": 200,
+   "y": 150,
+   "r": 110,
+   "name": "Glaskuppel Ø 8 m"
+  },
+  {
+   "form": "kreis",
+   "x": 200,
+   "y": 150,
+   "r": 85,
+   "name": "Rosen-Hochbeet (Naturstein)"
+  },
+  {
+   "form": "kreis",
+   "x": 200,
+   "y": 150,
+   "r": 38,
+   "name": "Kreisrunder Teich"
+  },
+  {
+   "form": "rechteck",
+   "x": 192,
+   "y": 105,
+   "b": 16,
+   "h": 10,
+   "name": "Quellstein"
+  },
+  {
+   "form": "kreis",
+   "x": 200,
+   "y": 150,
+   "r": 60,
+   "name": "Rundweg"
+  }
+ ]
+}

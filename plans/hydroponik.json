@@ -1,0 +1,41 @@
+{
+ "id": "hydroponik",
+ "titel": "Hydroponik",
+ "untertitel": "Gewächsdeck",
+ "massstab": "1:100 (schematisch)",
+ "lizenz": "© ROSARY ANBAU und ANLAGEN – Lizenz auf Anfrage",
+ "lizenzstatus": "nicht lizenziert – Platzhalter",
+ "artefakte": [
+  {
+   "form": "rechteck",
+   "x": 50,
+   "y": 60,
+   "b": 300,
+   "h": 40,
+   "name": "Nährstoffrinne 1"
+  },
+  {
+   "form": "rechteck",
+   "x": 50,
+   "y": 130,
+   "b": 300,
+   "h": 40,
+   "name": "Nährstoffrinne 2"
+  },
+  {
+   "form": "rechteck",
+   "x": 50,
+   "y": 200,
+   "b": 300,
+   "h": 40,
+   "name": "Kräuterbeet"
+  },
+  {
+   "form": "kreis",
+   "x": 370,
+   "y": 150,
+   "r": 18,
+   "name": "Wassertank"
+  }
+ ]
+}

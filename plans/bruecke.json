@@ -1,0 +1,49 @@
+{
+ "id": "bruecke",
+ "titel": "Brücke",
+ "untertitel": "Kommandobrücke am Bug",
+ "massstab": "1:100 (schematisch)",
+ "lizenz": "© ROSARY ANBAU und ANLAGEN – Lizenz auf Anfrage",
+ "lizenzstatus": "nicht lizenziert – Platzhalter",
+ "artefakte": [
+  {
+   "form": "rechteck",
+   "x": 60,
+   "y": 60,
+   "b": 280,
+   "h": 180,
+   "name": "Panoramaverglasung"
+  },
+  {
+   "form": "rechteck",
+   "x": 170,
+   "y": 130,
+   "b": 60,
+   "h": 40,
+   "name": "Kapitänsstuhl"
+  },
+  {
+   "form": "rechteck",
+   "x": 80,
+   "y": 180,
+   "b": 90,
+   "h": 35,
+   "name": "Navigationspult"
+  },
+  {
+   "form": "rechteck",
+   "x": 230,
+   "y": 180,
+   "b": 90,
+   "h": 35,
+   "name": "Kommunikation"
+  },
+  {
+   "form": "kreis",
+   "x": 200,
+   "y": 90,
+   "r": 20,
+   "name": "Sternkarte (Holo)"
+  }
+ ]
+}

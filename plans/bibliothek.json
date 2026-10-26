@@ -1,0 +1,49 @@
+{
+ "id": "bibliothek",
+ "titel": "Bibliothek",
+ "untertitel": "Archiv des Wissens",
+ "massstab": "1:100 (schematisch)",
+ "lizenz": "© ROSARY ANBAU und ANLAGEN – Lizenz auf Anfrage",
+ "lizenzstatus": "nicht lizenziert – Platzhalter",
+ "artefakte": [
+  {
+   "form": "rechteck",
+   "x": 50,
+   "y": 50,
+   "b": 300,
+   "h": 200,
+   "name": "Lesesaal"
+  },
+  {
+   "form": "rechteck",
+   "x": 60,
+   "y": 60,
+   "b": 30,
+   "h": 180,
+   "name": "Regal: Chroniken"
+  },
+  {
+   "form": "rechteck",
+   "x": 310,
+   "y": 60,
+   "b": 30,
+   "h": 180,
+   "name": "Regal: Baupläne"
+  },
+  {
+   "form": "kreis",
+   "x": 200,
+   "y": 150,
+   "r": 40,
+   "name": "Lesetisch rund"
+  },
+  {
+   "form": "rechteck",
+   "x": 150,
+   "y": 220,
+   "b": 100,
+   "h": 22,
+   "name": "Kartentisch"
+  }
+ ]
+}
