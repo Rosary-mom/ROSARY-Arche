@@ -69,7 +69,11 @@ deck('Rosarium mit Teich','Das Herz der Arche: ein rundes Hochbeet voller Rosen 
  for(let i=0;i<60;i++){const a=i/28*Math.PI*2,r=2.1+Math.random()*1;const stem=new THREE.Mesh(new THREE.CylinderGeometry(.02,.02,.3),M(0x2f6a32));stem.position.set(Math.cos(a)*r,.72,Math.sin(a)*r);g.add(stem);const rose=new THREE.Mesh(new THREE.IcosahedronGeometry(.12,1),M(i%3?0x9b1b30:0xe8c46a));rose.position.set(Math.cos(a)*r,.9,Math.sin(a)*r);g.add(rose)}});
 deck('Brücke','Kommandobrücke am Bug mit Rundumsicht und Navigationspulten.',new THREE.Vector3(0,.9,7.3),g=>{box(g,3,1,1.6,0xd8cdb0);box(g,2.6,.3,1.2,0x7a1a2c,.65,{emissive:0x300810});const gl=new THREE.Mesh(new THREE.CylinderGeometry(1.5,1.6,.5,24,1,true,-.8,1.6),M(0xcfe8ff,{transparent:true,opacity:.4}));gl.position.y=.9;g.add(gl);for(let i=0;i<3;i++){const c=box(g,.5,.25,.3,0x333a44,.65);c.position.set(-.8+i*.8,0,.4);c.position.y=.95}});
 deck('Kapelle','Stiller Raum des Gebets mit goldenem Kreuz und Rosenfenster.',new THREE.Vector3(6.3,.9,3.6),g=>{box(g,2,1.2,1.6,0xe8dcc0);const alt=new THREE.Mesh(new THREE.DodecahedronGeometry(.4,0),M(0xa89a84,{roughness:1,metalness:0}));alt.scale.set(1.3,.6,.8);alt.position.set(0,.75,-.4);g.add(alt);const rw=new THREE.Mesh(new THREE.CircleGeometry(.3,16),M(0x9b1b30,{emissive:0x5a0010}));rw.position.set(0,1.0,-.81);g.add(rw);const a=box(g,.12,1,.12,0xe8c46a,1.1,{emissive:0x664400});const b=box(g,.6,.12,.12,0xe8c46a,1.3,{emissive:0x664400})});
-deck('Bibliothek','Archiv des Wissens: Schriften, Baupläne und die Chronik der Reise.',new THREE.Vector3(-6.3,.9,3.6),g=>{box(g,2.2,1.2,1.6,0x7a1a2c);for(let i=0;i<4;i++){const s=box(g,2,.08,1.4,0xc9a24a,-.4+i*.3)}});
+deck('Bibliothek','Archiv des Wissens mit der LOGOS academical Library (Zugang über den Uni-Campus), keltischem Skriptorium und Studienkabinen.',new THREE.Vector3(-6.3,.9,3.6),g=>{box(g,2.2,1.2,1.6,0x7a1a2c);for(let i=0;i<4;i++){const s=box(g,.15,.08,1.4,0xc9a24a,-.4+i*.3);s.position.x=-1}
+ for(let i=0;i<24;i++){const bk=box(g,.1,.22,.06,[0x9b1b30,0x2a4a7a,0xe8c46a,0x3f6a3a][i%4],-.28+Math.floor(i/6)*.3);bk.position.set(-.98,bk.position.y,-.6+(i%6)*.22)}
+ const lt=new THREE.Mesh(new THREE.CylinderGeometry(.45,.45,.06,24),M(0x6b4a2a));lt.position.y=.62;g.add(lt);
+ for(let i=0;i<3;i++){const tm=box(g,.25,.18,.03,0x223344,.75,{emissive:0x3366aa,emissiveIntensity:1});const a=i/3*Math.PI*2;tm.position.set(Math.cos(a)*.3,.75,Math.sin(a)*.3);tm.lookAt(0,.75,0)}
+ for(let i=0;i<3;i++){const c=box(g,.3,.4,.35,0xe8d7b4,.8);c.position.set(.9,.8,-.5+i*.5)}});
 deck('Quartiere','Wohnkabinen der Besatzung und Pilger, ringförmig angeordnet.',new THREE.Vector3(6.3,.9,-3.6),g=>{for(let i=0;i<3;i++){const m=box(g,.6,.9,1.6,0xe6d8b8);m.position.x=-.7+i*.7}});
 deck('Hydroponik','Gewächsdeck für Gemüse, Kräuter und frische Luft.',new THREE.Vector3(-6.3,.9,-3.6),g=>{box(g,2.2,.4,1.6,0x5a3a22,-.3);for(let i=0;i<6;i++){const p=new THREE.Mesh(new THREE.ConeGeometry(.2,.6,8),M(0x3f9a4a));p.position.set(-.8+(i%3)*.8,.2,i<3?-.4:.4);g.add(p)}});
 const reactor=new THREE.Mesh(new THREE.SphereGeometry(.8,24,16),new THREE.MeshStandardMaterial({color:0xffc060,emissive:0xff8800,emissiveIntensity:2,clippingPlanes:cp}));
@@ -79,15 +83,16 @@ deck('Hangar','Startdeck mit kleinem Shuttle für Ausflüge zur Erde.',new THREE
 const ray=new THREE.Raycaster(),ptr=new THREE.Vector2(),tip=document.getElementById('tip');let hov=null;const open=new Set();
 const KEY={'Rosarium mit Teich':'rosarium','Brücke':'bruecke','Kapelle':'kapelle','Bibliothek':'bibliothek','Quartiere':'quartiere','Hydroponik':'hydroponik','Maschinenraum':'maschinenraum','Hangar':'hangar'};
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-function planSVG(p){let g='',l='';p.artefakte.forEach((a,i)=>{const n=i+1;let cx,cy;
+function planSVG(p){let g='',l='',ly=40;p.artefakte.forEach((a,i)=>{const n=i+1;let cx,cy;
  if(a.form==='kreis'){g+=`<circle cx="${a.x}" cy="${a.y}" r="${a.r}" fill="none" stroke="#dff1ff" stroke-width="1.5"/>`;cx=a.x+a.r*.7;cy=a.y-a.r*.7}
  else{g+=`<rect x="${a.x}" y="${a.y}" width="${a.b}" height="${a.h}" fill="none" stroke="#dff1ff" stroke-width="1.5"/>`;cx=a.x+a.b;cy=a.y}
  g+=`<circle cx="${cx}" cy="${cy}" r="8" fill="#0b3a78" stroke="#ffd877"/><text x="${cx}" y="${cy+4}" font-size="10" text-anchor="middle" fill="#ffd877">${n}</text>`;
- l+=`<text x="410" y="${40+i*20}" font-size="12" fill="#dff1ff">${n}  ${esc(a.name)}</text>`});
+ const w=[];let ln='';for(const t of String(a.name).split(' ')){if((ln+' '+t).trim().length>22){w.push(ln);ln=t}else ln=(ln+' '+t).trim()}w.push(ln);
+ l+=`<text x="410" y="${ly}" font-size="11" fill="#dff1ff">`+w.map((t,j)=>`<tspan x="${j?430:410}" dy="${j?13:0}">${j?'':n+'  '}${esc(t)}</tspan>`).join('')+'</text>';ly+=13*w.length+5});
  return `<svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" font-family="Courier New,monospace"><defs><pattern id="gr" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="#3d6fb0" stroke-width=".5"/></pattern></defs><rect width="600" height="300" fill="#0b3a78"/><rect width="600" height="300" fill="url(#gr)"/><rect x="4" y="4" width="592" height="292" fill="none" stroke="#dff1ff"/><line x1="400" y1="4" x2="400" y2="296" stroke="#dff1ff"/><text x="410" y="22" font-size="13" fill="#ffd877">LEGENDE</text>${g}${l}<text x="410" y="270" font-size="10" fill="#dff1ff">Maßstab ${esc(p.massstab)}</text><text x="410" y="285" font-size="9" fill="#ffd877">BAUMEISTER-PLAN · ${esc(p.titel)}</text></svg>`}
 async function showPlan(name){const k=KEY[name];const pl=document.getElementById('plan');try{const p=await (await fetch('plans/'+k+'.json')).json();
- document.getElementById('plt').textContent='Baumeister-Plan: '+p.titel;document.getElementById('pls').textContent=p.untertitel;document.getElementById('plsvg').innerHTML=planSVG(p);document.getElementById('pll').textContent=p.lizenz+' · '+p.lizenzstatus}catch(e){document.getElementById('plt').textContent=name;document.getElementById('plsvg').textContent='Plan konnte nicht geladen werden.'}
- pl.style.display='flex'}
+ document.getElementById('plt').textContent='Baumeister-Plan: '+p.titel;document.getElementById('pls').innerHTML=esc(p.untertitel)+(p.hinweis?'<p style="color:#e8c46a">'+esc(p.hinweis)+'</p>':'');document.getElementById('plsvg').innerHTML=planSVG(p);document.getElementById('pll').textContent=p.lizenz+' · '+p.lizenzstatus}catch(e){document.getElementById('plt').textContent=name;document.getElementById('plsvg').textContent='Plan konnte nicht geladen werden.'}
+ document.getElementById('panel').style.display='none';pl.style.display='flex'}
 document.getElementById('plc').onclick=()=>document.getElementById('plan').style.display='none';
 window.arche={decks,showPlan};
 const deckOf=o=>{while(o&&!decks.includes(o))o=o.parent;return o};
@@ -97,7 +102,7 @@ R.domElement.addEventListener('pointermove',e=>{const g=pick(e);if(g!==hov){hov&
  if(g){tip.style.display='block';tip.style.left=e.clientX+14+'px';tip.style.top=e.clientY+14+'px';tip.innerHTML='<b>'+g.name+'</b><br>'+g.userData.desc}else tip.style.display='none'});
 let down;R.domElement.addEventListener('pointerdown',e=>down=[e.clientX,e.clientY]);
 R.domElement.addEventListener('pointerup',e=>{if(!down||Math.hypot(e.clientX-down[0],e.clientY-down[1])>6)return;const g=pick(e);if(!g)return;
- open.has(g)?open.delete(g):open.add(g);document.getElementById('pt').textContent=g.name;document.getElementById('pd').textContent=g.userData.desc;document.getElementById('panel').style.display='block';if(open.has(g))showPlan(g.name)});
+ open.has(g)?open.delete(g):open.add(g);document.getElementById('pt').textContent=g.name;document.getElementById('pd').textContent=g.userData.desc;if(open.has(g))showPlan(g.name);else document.getElementById('panel').style.display='block'});
 document.getElementById('pc').onclick=()=>document.getElementById('panel').style.display='none';
 document.getElementById('reset').onclick=()=>open.clear();
 document.getElementById('cut').oninput=e=>clip.constant=+e.target.value;
